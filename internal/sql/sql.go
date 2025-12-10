@@ -29,7 +29,7 @@ func ParseRow[T any](rows *sql.Rows) ([]T, error) {
 		columns := make([]any, numCols)
 
 		// Vamos introduciendo el valor de la columna a cada campo
-		for i := range numCols {
+		for i := 0; i < numCols; i++ {
 			field := v.Field(i)
 			if !field.CanSet() {
 				return nil, fmt.Errorf("ParseRow: El campo %s no esta exportado o no es asignable", v.Field(i))
