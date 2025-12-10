@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 
+
+	"tienda-online/internal"
 	"tienda-online/internal/db"
 	sqlutil "tienda-online/internal/sql"
 )
@@ -14,6 +16,10 @@ type Direccion struct {
 	IdUsuario   int
 	Tipo        string
 	Detalle     sql.NullString
+}
+
+func (d Direccion) String() string {
+	return fmt.Sprintf("Direccion #%d | UsuarioID:%d | %s | %s", d.IdDirección, d.IdUsuario, d.Tipo, internal.NullString(d.Detalle))
 }
 
 type DireccionManager struct {

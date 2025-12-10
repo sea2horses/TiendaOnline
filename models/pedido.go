@@ -15,6 +15,14 @@ type Pedido struct {
 	Entregado bool
 }
 
+func (p Pedido) String() string {
+	ent := "No entregado"
+	if p.Entregado {
+		ent = "Entregado"
+	}
+	return fmt.Sprintf("Pedido #%d | UsuarioID:%d | %s", p.IdPedido, p.IdUsuario, ent)
+}
+
 type PedidoManager struct {
 	db *sql.DB
 }

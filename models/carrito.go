@@ -14,6 +14,10 @@ type Carrito struct {
 	IdUsuario int
 }
 
+func (c Carrito) String() string {
+	return fmt.Sprintf("Carrito #%d | UsuarioID:%d", c.IdCarrito, c.IdUsuario)
+}
+
 type CarritoManager struct {
 	db *sql.DB
 }

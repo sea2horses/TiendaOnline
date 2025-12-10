@@ -15,6 +15,14 @@ type Producto struct {
 	IdCategoria sql.NullInt32
 }
 
+func (p Producto) String() string {
+	cat := "sin categoria"
+	if p.IdCategoria.Valid {
+		cat = fmt.Sprintf("CategoriaID:%d", p.IdCategoria.Int32)
+	}
+	return fmt.Sprintf("Producto #%d | %s | %s", p.IdProducto, p.Descripcion, cat)
+}
+
 type ProductoManager struct {
 	db *sql.DB
 }

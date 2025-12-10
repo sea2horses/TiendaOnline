@@ -10,6 +10,10 @@ type Stringable interface {
 }
 
 func ListItems[T Stringable](items []T) {
+	if len(items) == 0 {
+		fmt.Println("No hay objetos que mostrar!")
+	}
+
 	for i, item := range items {
 		fmt.Printf("#%d: %s\n", i+1, item.String())
 	}

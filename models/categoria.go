@@ -14,6 +14,10 @@ type Categoria struct {
 	Nombre      string
 }
 
+func (c Categoria) String() string {
+	return fmt.Sprintf("Categoria #%d | %s", c.IdCategoria, c.Nombre)
+}
+
 type CategoriaManager struct {
 	db *sql.DB
 }

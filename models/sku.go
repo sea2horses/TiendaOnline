@@ -111,3 +111,7 @@ func (m *SKUManager) Delete(ctx context.Context, id int) error {
 	_, err := db.ExecFromFile(ctx, "remover/sku.sql", sql.Named("id", id))
 	return err
 }
+
+func (s SKU) String() string {
+	return fmt.Sprintf("SKU #%d | ProductoID:%d | Precio: %.2f | Stock: %d", s.IdSKU, s.IdProducto, s.Precio, s.Stock)
+}

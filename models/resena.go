@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"tienda-online/internal"
 	"tienda-online/internal/db"
 	sqlutil "tienda-online/internal/sql"
 )
@@ -15,6 +16,11 @@ type Resena struct {
 	IdProducto int
 	Puntuación int
 	Comentario sql.NullString
+}
+
+func (r Resena) String() string {
+	return fmt.Sprintf("Reseña #%d | UsuarioID:%d | ProductoID:%d | %d/5 | %s",
+		r.IdReseña, r.IdUsuario, r.IdProducto, r.Puntuación, internal.NullString(r.Comentario))
 }
 
 type ResenaManager struct {

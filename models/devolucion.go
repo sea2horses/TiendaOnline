@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"tienda-online/internal"
 	"tienda-online/internal/db"
 	sqlutil "tienda-online/internal/sql"
 )
@@ -17,6 +18,12 @@ type Devolucion struct {
 	Estado       sql.NullString
 	Descripcion  sql.NullString
 	Resolucion   sql.NullString
+}
+
+func (d Devolucion) String() string {
+	return fmt.Sprintf("Devolucion #%d | PedidoID:%d | %s | Estado:%s | Desc:%s | Resol:%s",
+		d.IdDevolucion, d.IdPedido, d.Fecha.Format("2006-01-02"), internal.NullString(d.Estado),
+		internal.NullString(d.Descripcion), internal.NullString(d.Resolucion))
 }
 
 type DevolucionManager struct {

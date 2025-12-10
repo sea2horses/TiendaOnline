@@ -16,6 +16,10 @@ type CarritoDetalle struct {
 	Cantidad  int
 }
 
+func (c CarritoDetalle) String() string {
+	return fmt.Sprintf("Detalle #%d | CarritoID:%d | SKU:%d | Cantidad:%d", c.IdDetalle, c.IdCarrito, c.IdSKU, c.Cantidad)
+}
+
 type CarritoDetalleManager struct {
 	db *sql.DB
 }

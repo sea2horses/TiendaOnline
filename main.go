@@ -5,7 +5,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -35,10 +34,7 @@ const (
 var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
-
-	readLine("HOla: ")
 	printBanner()
-	readLine("HOla: ")
 
 	conn, err := initDatabaseFlow(defaultServer)
 	internal.Check(err, "No se pudo inicializar la base de datos")
@@ -240,7 +236,7 @@ func menuCategorias() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -285,7 +281,7 @@ func menuProductos() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -332,7 +328,7 @@ func menuSKUs() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -381,7 +377,7 @@ func menuCarritos() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -426,7 +422,7 @@ func menuDetalles() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -475,7 +471,7 @@ func menuResenas() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -526,7 +522,7 @@ func menuDirecciones() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -575,7 +571,7 @@ func menuPedidos() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -622,7 +618,7 @@ func menuDevoluciones() {
 			if handleErr(err) {
 				break
 			}
-			printList(items)
+			internal.ListItems(items)
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
@@ -735,10 +731,4 @@ func handleErr(err error) bool {
 	}
 	fmt.Printf("%sOK%s\n", colorGreen, colorReset)
 	return false
-}
-
-func printList[T any](items []T) {
-	for i, it := range items {
-		log.Printf("[%d] %+v", i, it)
-	}
 }
