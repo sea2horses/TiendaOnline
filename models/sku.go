@@ -113,5 +113,5 @@ func (m *SKUManager) Delete(ctx context.Context, id int) error {
 }
 
 func (s SKU) String() string {
-	return fmt.Sprintf("SKU #%d | ProductoID:%d | Precio: %.2f | Stock: %d", s.IdSKU, s.IdProducto, s.Precio, s.Stock)
+	return fmt.Sprintf("[ SKU #%d | ProductoID:%d | Precio: %.2f | Stock: %d ]", s.IdSKU, s.IdProducto, s.Precio, s.Stock)
 }

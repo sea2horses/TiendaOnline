@@ -363,6 +363,7 @@ func menuSKUs() {
 
 func menuCarritos() {
 	m := models.NewCarritoManager(db.CurrentDatabase)
+	detailManager := models.NewCarritoDetalleManager(db.CurrentDatabase)
 	for {
 		fmt.Println(colorCyan + "\n-- Carritos --" + colorReset)
 		fmt.Println("[1] Listar")
@@ -378,14 +379,47 @@ func menuCarritos() {
 			if handleErr(err) {
 				break
 			}
-			internal.ListItems(items)
+			showDetails := confirm("Mostrar detalles de cada carrito? (s/N): ")
+			if !showDetails {
+				internal.ListItems(items)
+				break
+			}
+			for _, cart := range items {
+				fmt.Println(cart.String())
+				details, err := detailManager.ListByCarrito(context.Background(), cart.IdCarrito)
+				if err != nil {
+					fmt.Printf("  Error cargando detalles: %v\n", err)
+					continue
+				}
+				if len(details) == 0 {
+					fmt.Println("  (sin detalles)")
+					continue
+				}
+				for _, d := range details {
+					fmt.Printf("  - %s\n", d.String())
+				}
+			}
 		case "2":
 			id := readInt("ID: ")
 			item, err := m.Get(context.Background(), id)
 			if handleErr(err) {
 				break
 			}
-			fmt.Printf("%+v\n", item)
+			fmt.Println(item.String())
+			if confirm("Mostrar detalles de este carrito? (s/N): ") {
+				details, err := detailManager.ListByCarrito(context.Background(), item.IdCarrito)
+				if err != nil {
+					fmt.Printf("%sError: %v%s\n", colorRed, err, colorReset)
+					break
+				}
+				if len(details) == 0 {
+					fmt.Println("(sin detalles)")
+				} else {
+					for _, d := range details {
+						fmt.Printf("- %s\n", d.String())
+					}
+				}
+			}
 		case "3":
 			uid := readInt("ID Usuario: ")
 			handleErr(m.Create(context.Background(), uid))

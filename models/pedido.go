@@ -20,7 +20,7 @@ func (p Pedido) String() string {
 	if p.Entregado {
 		ent = "Entregado"
 	}
-	return fmt.Sprintf("Pedido #%d | UsuarioID:%d | %s", p.IdPedido, p.IdUsuario, ent)
+	return fmt.Sprintf("[ Pedido #%d | UsuarioID:%d | %s ]", p.IdPedido, p.IdUsuario, ent)
 }
 
 type PedidoManager struct {

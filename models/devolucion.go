@@ -21,7 +21,7 @@ type Devolucion struct {
 }
 
 func (d Devolucion) String() string {
-	return fmt.Sprintf("Devolucion #%d | PedidoID:%d | %s | Estado:%s | Desc:%s | Resol:%s",
+	return fmt.Sprintf("[ Devolucion #%d | PedidoID:%d | %s | Estado:%s | Desc:%s | Resol:%s ]",
 		d.IdDevolucion, d.IdPedido, d.Fecha.Format("2006-01-02"), internal.NullString(d.Estado),
 		internal.NullString(d.Descripcion), internal.NullString(d.Resolucion))
 }

@@ -17,7 +17,17 @@ type CarritoDetalle struct {
 }
 
 func (c CarritoDetalle) String() string {
-	return fmt.Sprintf("Detalle #%d | CarritoID:%d | SKU:%d | Cantidad:%d", c.IdDetalle, c.IdCarrito, c.IdSKU, c.Cantidad)
+	carritoLabel := fmt.Sprintf("CarritoID:%d", c.IdCarrito)
+	if cart, err := NewCarritoManager(nil).Get(context.Background(), c.IdCarrito); err == nil && cart != nil {
+		carritoLabel = cart.String()
+	}
+
+	skuLabel := fmt.Sprintf("SKU:%d", c.IdSKU)
+	if sku, err := NewSKUManager(nil).Get(context.Background(), c.IdSKU); err == nil && sku != nil {
+		skuLabel = sku.String()
+	}
+
+	return fmt.Sprintf("[ Detalle #%d | %s | %s | Cantidad:%d ]", c.IdDetalle, carritoLabel, skuLabel, c.Cantidad)
 }
 
 type CarritoDetalleManager struct {
@@ -57,6 +67,19 @@ func (m *CarritoDetalleManager) Get(ctx context.Context, id int) (*CarritoDetall
 		return nil, fmt.Errorf("detalle %d no encontrado", id)
 	}
 	return &items[0], nil
+}
+
+// ListByCarrito obtiene los detalles de un carrito especifico.
+func (m *CarritoDetalleManager) ListByCarrito(ctx context.Context, cartId int) ([]CarritoDetalle, error) {
+	if err := requirePositive("idCarrito", cartId); err != nil {
+		return nil, err
+	}
+	rows, err := db.QueryRowsFromFile(ctx, "leer/carrito_detalle_por_carrito.sql", sql.Named("cartId", cartId))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	return sqlutil.ParseRow[CarritoDetalle](rows)
 }
 
 func (m *CarritoDetalleManager) Create(ctx context.Context, cartId, skuId, quantity int) error {

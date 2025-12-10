@@ -21,7 +21,7 @@ type Cliente struct {
 }
 
 func (c Cliente) String() string {
-	return fmt.Sprintf("Cliente #%d | %s | Tel: %s | Correo: %s", c.IdUsuario, c.Nombre, c.Telefono, internal.NullString(c.Correo))
+	return fmt.Sprintf("[ Cliente #%d | %s | Tel: %s | Correo: %s ]", c.IdUsuario, c.Nombre, c.Telefono, internal.NullString(c.Correo))
 }
 
 type ClienteManager struct {

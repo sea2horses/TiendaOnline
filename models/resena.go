@@ -19,7 +19,7 @@ type Resena struct {
 }
 
 func (r Resena) String() string {
-	return fmt.Sprintf("Reseña #%d | UsuarioID:%d | ProductoID:%d | %d/5 | %s",
+	return fmt.Sprintf("[ Reseña #%d | UsuarioID:%d | ProductoID:%d | %d/5 | %s ]",
 		r.IdReseña, r.IdUsuario, r.IdProducto, r.Puntuación, internal.NullString(r.Comentario))
 }
 

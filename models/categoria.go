@@ -15,7 +15,7 @@ type Categoria struct {
 }
 
 func (c Categoria) String() string {
-	return fmt.Sprintf("Categoria #%d | %s", c.IdCategoria, c.Nombre)
+	return fmt.Sprintf("[ Categoria #%d | %s ]", c.IdCategoria, c.Nombre)
 }
 
 type CategoriaManager struct {

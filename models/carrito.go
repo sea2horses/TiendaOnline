@@ -15,7 +15,12 @@ type Carrito struct {
 }
 
 func (c Carrito) String() string {
-	return fmt.Sprintf("Carrito #%d | UsuarioID:%d", c.IdCarrito, c.IdUsuario)
+	userLabel := fmt.Sprintf("UsuarioID:%d", c.IdUsuario)
+	user, err := NewClienteManager(nil).Get(context.Background(), c.IdUsuario)
+	if err == nil && user != nil {
+		userLabel = user.String()
+	}
+	return fmt.Sprintf("[ Carrito #%d | %s ]", c.IdCarrito, userLabel)
 }
 
 type CarritoManager struct {
