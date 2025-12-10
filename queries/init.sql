@@ -33,9 +33,11 @@ IF DB_ID(N'Tienda') IS NULL
     -- Cotejamiento en español moderno, case-insensitive y accent-sensitive
     COLLATE Modern_Spanish_CI_AS;
 END;
+GO
 
 -- Cambiamos el contexto de ejecución a la base de datos recién creada.
-USE Tienda;
+USE Tienda
+GO
 
 -- Dropeamos las tablas que ya existen
 DROP TABLE IF EXISTS Clientes

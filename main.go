@@ -69,6 +69,7 @@ func initDatabaseFlow(server string) (*sql.DB, error) {
 		return nil, fmt.Errorf("no se pudo conectar a master: %w", err)
 	}
 	db.SetDatabase(masterConn)
+	fmt.Println("Conectado a master.")
 	_, err = db.ExecFromFile(context.Background(), "init.sql")
 	masterConn.Close()
 	if err != nil {
