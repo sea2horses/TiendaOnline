@@ -20,7 +20,6 @@ type Cliente struct {
 	PasswordSalt []byte
 }
 
-// To String método
 func (c Cliente) String() string {
 	return fmt.Sprintf("id: %d, nombre: %s, telefono: %s, correo: %v.", c.IdUsuario, c.Nombre, c.Telefono, internal.NullString(c.Correo))
 }
@@ -49,7 +48,10 @@ func (m *ClienteManager) List(ctx context.Context) ([]Cliente, error) {
 
 // Get trae un cliente por ID.
 func (m *ClienteManager) Get(ctx context.Context, id int) (*Cliente, error) {
-	rows, err := db.QueryRowsFromFile(ctx, "leer/id/cliente_por_id.sql", sql.Named("id", id))
+	if err := requirePositive("idUsuario", id); err != nil {
+		return nil, err
+	}
+	rows, err := db.QueryRowsFromFile(ctx, "leer/cliente_por_id.sql", sql.Named("id", id))
 	if err != nil {
 		return nil, err
 	}
@@ -67,13 +69,27 @@ func (m *ClienteManager) Get(ctx context.Context, id int) (*Cliente, error) {
 
 // Create inserta un nuevo cliente (hash y salt se generan en la query).
 func (m *ClienteManager) Create(ctx context.Context, name, phone, email, password string) error {
-	if m.db == nil {
-		return fmt.Errorf("no hay conexión a base de datos")
+	if err := ensureDB(m.db); err != nil {
+		return err
 	}
-	_, err := db.ExecFromFile(ctx, "añadir/cliente.sql",
+	var err error
+	name, err = requireNonEmpty("nombre", name)
+	if err != nil {
+		return err
+	}
+	phone, err = requireNonEmpty("telefono", phone)
+	if err != nil {
+		return err
+	}
+	password, err = requireNonEmpty("contraseña", password)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.ExecFromFile(ctx, "añadir/cliente.sql",
 		sql.Named("name", name),
 		sql.Named("phone", phone),
-		sql.Named("email", email),
+		sql.Named("email", optionalString(email)),
 		sql.Named("password", password),
 	)
 	return err
@@ -81,24 +97,45 @@ func (m *ClienteManager) Create(ctx context.Context, name, phone, email, passwor
 
 // Update modifica datos básicos del cliente (sin contraseña).
 func (m *ClienteManager) Update(ctx context.Context, id int, name, phone, email string) error {
-	if m.db == nil {
-		return fmt.Errorf("no hay conexión a base de datos")
+	if err := ensureDB(m.db); err != nil {
+		return err
 	}
-	_, err := db.ExecFromFile(ctx, "editar/cliente.sql",
+	if err := requirePositive("idUsuario", id); err != nil {
+		return err
+	}
+	var err error
+	name, err = requireNonEmpty("nombre", name)
+	if err != nil {
+		return err
+	}
+	phone, err = requireNonEmpty("telefono", phone)
+	if err != nil {
+		return err
+	}
+	_, err = db.ExecFromFile(ctx, "editar/cliente.sql",
 		sql.Named("id", id),
 		sql.Named("name", name),
 		sql.Named("phone", phone),
-		sql.Named("email", email),
+		sql.Named("email", optionalString(email)),
 	)
 	return err
 }
 
 // UpdatePassword cambia la contraseña aplicando hash/salt en el SQL.
 func (m *ClienteManager) UpdatePassword(ctx context.Context, id int, password string) error {
-	if m.db == nil {
-		return fmt.Errorf("no hay conexión a base de datos")
+	if err := ensureDB(m.db); err != nil {
+		return err
 	}
-	_, err := db.ExecFromFile(ctx, "editar/cliente_contraseña.sql",
+	if err := requirePositive("idUsuario", id); err != nil {
+		return err
+	}
+	var err error
+	password, err = requireNonEmpty("contraseña", password)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.ExecFromFile(ctx, "editar/cliente_contraseña.sql",
 		sql.Named("id", id),
 		sql.Named("password", password),
 	)
@@ -107,8 +144,11 @@ func (m *ClienteManager) UpdatePassword(ctx context.Context, id int, password st
 
 // Delete borra un cliente por ID.
 func (m *ClienteManager) Delete(ctx context.Context, id int) error {
-	if m.db == nil {
-		return fmt.Errorf("no hay conexión a base de datos")
+	if err := ensureDB(m.db); err != nil {
+		return err
+	}
+	if err := requirePositive("idUsuario", id); err != nil {
+		return err
 	}
 	_, err := db.ExecFromFile(ctx, "remover/cliente.sql", sql.Named("id", id))
 	return err

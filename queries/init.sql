@@ -97,8 +97,8 @@ CREATE TABLE SKU
 (
     idSKU INT IDENTITY(1,1) PRIMARY KEY,
     idProducto INT NOT NULL,
-    precio DECIMAL(10,2) NOT NULL,
-    stock INT NOT NULL DEFAULT 0,
+    precio DECIMAL(10,2) NOT NULL CHECK (precio > 0),
+    stock INT NOT NULL DEFAULT 0 CHECK (stock > 0),
 
     FOREIGN KEY (idProducto) REFERENCES Producto(idProducto)
     -- Si se borra el producto, tambien todos los productos minimos vnedibles

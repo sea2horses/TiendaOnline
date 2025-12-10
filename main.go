@@ -36,6 +36,13 @@ func main() {
 	clientes, err := manager.List(context.Background())
 	internal.Check(err, "No se pudieron leer los clientes")
 	fmt.Println("Clientes Encontrados:")
+	internal.ListItems(clientes)
 
+	err = manager.Delete(context.Background(), 2)
+	internal.Check(err, "No se pudo borrar")
+
+	clientes, err = manager.List(context.Background())
+	internal.Check(err, "No se pudieron leer los clientes")
+	fmt.Println("Clientes Encontrados:")
 	internal.ListItems(clientes)
 }
